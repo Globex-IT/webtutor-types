@@ -1,0 +1,27 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es5",
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "strictNullChecks": true,
+        "declaration": true,
+        "strictFunctionTypes": true,
+        "types": [],
+        "strict": true,
+        "noLib": true,
+        "baseUrl": "src",
+        "outDir": "../../lib",
+        "lib": [
+            "dom",
+            "es5",
+            "scripthost",
+            "es2015.symbol"
+        ]
+    },
+    "include": [
+        "**/*.d.ts",
+        "./**/*.ts",
+        "../.eslintrc.json"
+    ]
+}

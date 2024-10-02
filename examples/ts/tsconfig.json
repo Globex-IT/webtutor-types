@@ -1,18 +1,17 @@
-
 {
-  "compilerOptions": {
-    "target": "es5",
-    "module": "es6",
-    "esModuleInterop": true,
-    "strict": false,
-    "noImplicitAny": true,
-    "allowJs": true,
-    "moduleResolution": "node",
-    "baseUrl": "src",
-    "noLib": true,
-    "typeRoots": [
-      "node_modules/@umbrik/webtutor-types/lib",
-      "node_modules/@umbrik/webtutor-types/lib/xml"
-    ]
-  }
+    "compilerOptions": {
+        "target": "es5",
+        "module": "es6",
+        "strict": false,
+        "noImplicitAny": true,
+        "allowJs": true,
+        "moduleResolution": "node",
+        "baseUrl": "src",
+        "typeRoots": [
+            "node_modules/@globexit/webtutor-types/build/web-soft/types",
+            "node_modules/@globexit/webtutor-types/build/web-soft/types/xml"
+        ],
+        "esModuleInterop": true,
+        "noLib": true
+    }
 }

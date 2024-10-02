@@ -1,0 +1,2 @@
+type ConstItemCatalogDocumentTopElem = XmlTopElem &
+    ConstantItemBase & {};

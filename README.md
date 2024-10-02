@@ -1,77 +1,229 @@
-<h1 align="center">WT Types</h1>
+<h1 align="center">Websoft Types</h1>
 <div align="center">
-  Typescript типы для WebSoft HCM.
-  
-  [![main](https://github.com/umbrik/webtutor-types/actions/workflows/main.check.yml/badge.svg)](https://github.com/umbrik/webtutor-types/actions/workflows/main.check.yml)
-  ![npm](https://img.shields.io/npm/dw/@umbrik/webtutor-types)
+  Typescript типы и трансформеры для WebSoft HCM.
+
+![npm](https://img.shields.io/npm/dw/@globexit/websoft-types)
 </div>
 
-## Зачем?
+## Что это?
 
-У вас могут возникнуть вопросы:
-- **_А для чего вообще создан этот репозиторий?_**
-- **_Что это за типы такие?_**
-- **_Зачем мне это все нужно?_**
+Этот пакет предоставляет TypeScript типы для SSJS платформы WebSoft (WebTutor), а также набор трансформеров для конфигурации транспилированного JavaScript.
 
-Для того, чтобы писать чистый код с меньшим количеством ошибок был создан этот репозиторий с типами для объектов WebSoftHCM.
+## Установка
 
-Этот **npm** пакет позволяет добавить проверку типов и **IntelliSense** подсказки в ваши проект (см. [пример](#%EF%B8%8F-Пример-использования)).
-
-## 📦 Установка
-
-> **_Важно:_** типы работают только с **typescript<=4.4.4** в связи с тем, что при конкатенации строк **+** теперь превращается в **.concat** https://github.com/microsoft/TypeScript/pull/45304
-
-Установка типов сводится к установке самой зависимости в ваш проект и **typescript**:
-
-### npm
+Чтобы установить пакет, выполните следующую команду:
 
 ```bash
-npm i typescript@4.4.4 -D
-npm i @umbrik/webtutor-types -D
+npm i @globexit/websoft-types -D
 ```
 
-### or yarn
-
-```bash
-yarn add typescript@4.4.4 -D
-yarn add @umbrik/webtutor-types -D
-```
-
-## 🔨 Настройка
-
-Типы можно использовать как в проектах, написанных с использованием **typescript**, так и в проектах, написанных на **javascript**.
-
-Генерируем конфиг, либо просто создаем вручную файл **tsconfig.json**
-
-```bash
-npx tsc -init
-```
-
-Далее обновляем конфиг:
+## Подключение типов
+Для добавления типов необходимо настроить typeRoots в вашем tsconfig.json:
 
 ```json
-{
-  "compilerOptions": {
-    "target": "es5",
-    "module": "es6",
-    "esModuleInterop": true,
-    "strict": false,
-    "noImplicitAny": true,
-    "allowJs": true,
-    "isolatedModules": true,
-    "moduleResolution": "node",
-    "baseUrl": "src",
-    "noLib": true,
-    "typeRoots": [
-      "node_modules/@umbrik/webtutor-types/lib",
-      "node_modules/@umbrik/webtutor-types/lib/xml"
-    ]
-  }
-}
+"typeRoots": [
+    "../node_modules/@globexit/websoft-types/lib/web-soft/types",
+    "../node_modules/@globexit/websoft-types/lib/web-soft/types/xml"
+]
 ```
 
-## ⌨️ Пример использования
+## Настройка Gulp
 
-Примеры использования можно найти в [examples](/examples/)
+В вашей конфигурации Gulp необходимо подключить трансформеры и менеджер импортов:
+```js
+import { TransformerConfigurator } from "@globexit/websoft-types/lib/common/transformers/transformer-configurator";
+import { ImportManager } from "@globexit/websoft-types/lib/common/utils/import-manager";
 
-![image](https://github.com/HCM-guru/webtutor-types/assets/693254/aefa6c12-4479-4cab-a7e8-c29d880358b7)
+const transformerConfigurator = new TransformerConfigurator();
+const importManager = new ImportManager();
+```
+
+Далее добавьте функции для обработки импортов в цепочку конфигурации:
+```js
+export const transformTS = (path) => {
+    return src(path, { base: SRC_PATH })
+        .pipe(change(importManager.addFuncImports))
+        .pipe(change(importManager.replaceImports));
+};
+```
+
+## Создание проекта цепочки преобразования в Gulp
+Создайте или подключите в существующий createProject трансформеры для преобразования JS:
+```js
+const tsProject = createProject(TS_CONFIG_PATH, {
+    typescript: transformerConfigurator.ts,
+    getCustomTransformers: () => ({
+        before: transformerConfigurator.getTransformers()
+    })
+});
+```
+
+## Полная конфигурация
+Объедините все части конфигурации в одну цепочку:
+
+```js
+export const transformTS = (path) => {
+    return src(path, { base: SRC_PATH })
+        .pipe(change(importManager.addFuncImports))
+        .pipe(change(importManager.replaceImports))
+        .pipe(include({
+            extensions: 'ts',
+            hardFail: true,
+            separateInputs: true,
+            includePaths: [
+                __dirname + "../../node_modules"
+            ]
+        }))
+        .pipe(tsProject());
+};
+```
+
+## Обработка импортов
+Не забудьте дать доступ трансформерам к `node_modules` добавив в `include`:
+
+```js
+.pipe(include({
+    extensions: 'ts',
+    hardFail: true,
+    separateInputs: true,
+    includePaths: [
+        __dirname + "../../node_modules"
+    ]
+}))
+```
+
+## Описание трансформеров
+Данный пакет предоставляет следующие трансформеры:
+
+* ##### Преобразование for...of в for...in:
+
+    ##### TypeScript:
+    ```js
+    for (const item of [1, 2, 3]) { }
+    ```
+
+    ##### SSJS:
+    ```js
+    for (item in [1, 2, 3]) { }
+    ```
+
+---
+
+* ##### Удаление объявления переменных из циклов:
+
+  ##### TypeScript:
+    ```js
+    let sum = 0;
+    for (const item of [1, 2, 3]) {
+        sum += item;
+    
+        const num = 1;
+        sum += num;
+    }
+    ```
+
+  ##### SSJS:
+    ```js
+    var sum = 0;
+    for (item in [1, 2, 3]) {
+        sum += item;
+  
+        num = 1;
+        sum += num;
+    }
+    ```
+  
+---
+
+* ##### Преобразование лямбд:
+
+  ##### TypeScript:
+    ```js
+    let sum = (a: number, b: number) => a + b;
+    ```
+
+  ##### SSJS:
+    ```js
+    var sum = function _1(a, b) { return a + b; };
+    ```
+  
+---
+
+* ##### Рабочий импорт через комментарий:
+
+  ##### TypeScript:
+    ```js
+    import { sum } from './sum'; //.
+
+    let a = 2;
+    let b = 3;
+    
+    let num = sum(a, b);
+    ```
+
+  ##### SSJS:
+    ```js
+    function sum(a, b) {
+        return a + b;
+    }
+  
+    var a = 2;
+    var b = 3;
+    var num = sum(a, b);
+    ```
+  
+---
+
+* ##### Поддержка методов JS для работы с массивами: В данный момент поддерживаются: map, filter, some, any, reduce, includes, find, pop:
+
+  ##### TypeScript:
+    ```js
+    let array = [2, 4, 6, 3, 7, 4, 7];
+
+    let res1 = array.map(i => i * 2);
+    let res2 = array.filter(i => i > 3);
+    let res3 = array.find(i => i === 4);
+    ```
+
+  ##### SSJS:
+    ```js
+    function find(array, predicate, thisArg) {
+        if (array == null)
+            throw new Error('"this" is null or undefined');
+        var len = ArrayCount(array);
+        for (k = 0; k < len; k++) {
+            value = array[k];
+            if (predicate(value, k, array, thisArg))
+                return value;
+        }
+        return undefined;
+    }
+    
+    function filter(array, predicate) {
+        var result = [];
+        for (i = 0; i < ArrayCount(array); i++) {
+            if (predicate(array[i], i, array)) {
+                result.push(array[i]);
+            }
+        }
+        return result;
+    }
+    
+    function map(array, callback) {
+        var result = [];
+        for (i = 0; i < ArrayCount(array); i++) {
+            result.push(callback(array[i], i, array));
+        }
+        return result;
+    }
+    
+    var array = [2, 4, 6, 3, 7, 4, 7];
+    var res1 = map(array, function _1(i) { return i * 2; });
+    var res2 = filter(array, function _2(i) { return i > 3; });
+    var res3 = find(array, function _3(i) { return i === 4; });
+    ```
+  
+---
+
+## Заключение
+Пакет @globexit/websoft-types предоставляет необходимые инструменты для работы с SSJS через TS, а также значительно упрощает процесс разработки с использованием трансформеров для обработки кода.

@@ -1,4 +1,4 @@
-import { testArrayOfObjects, testPrimitivesArray, xmlDocumentForTesting } from "./mocks/arrayFunctions";
+import {testArrayOfObjects, testPrimitivesArray, xmlDocumentForTesting} from "./mocks/arrayFunctions";
 
 CheckPamMd5("source_string", "checksum");
 
@@ -22,7 +22,7 @@ ArrayFind(testPrimitivesArray, "This == 2");
 ArrayFind(testArrayOfObjects, "This.option1 == 1");
 const arrayFindXmlResultData = ArrayFind(xmlDocumentForTesting.TopElem.tasks, "This.name == \"testValue\"");
 // проверка на то что мы получаем XmlElem, к которому можем обратиться
-arrayFindXmlResultData.OptChild("testValue");
+arrayFindXmlResultData?.OptChild("testValue");
 
 ArrayFirstElem(testPrimitivesArray);
 ArrayFirstElem(testArrayOfObjects);
@@ -34,10 +34,10 @@ ArrayIntersect(testPrimitivesArray, testArrayOfObjects);
 ArrayIntersect(testArrayOfObjects, testPrimitivesArray, "This.option1");
 ArrayIntersect(ArrayDirect(xmlDocumentForTesting.TopElem.tasks), testArrayOfObjects, "This.name", "This.option1");
 const arrayIntersectXmlResultData = ArrayIntersect(
-  xmlDocumentForTesting.TopElem.tasks,
-  xmlDocumentForTesting.TopElem.tasks,
-  "This.name",
-  "This.option1"
+    xmlDocumentForTesting.TopElem.tasks,
+    xmlDocumentForTesting.TopElem.tasks,
+    "This.name",
+    "This.option1"
 );
 
 // проверка на то что мы получаем XmlElem, к которому можем обратиться
@@ -85,8 +85,8 @@ arrayOptFirstElemXmlResultData?.OptChild("testValue");
 const arrayOptFirstElemXmlResultDataDefaultValue = ArrayOptFirstElem(xmlDocumentForTesting.TopElem.tasks, "testValue");
 
 if (arrayOptFirstElemXmlResultDataDefaultValue !== "testValue") {
-  // если нам вернулось не значение по умолчанию то должен быть XmlElem
-  arrayOptFirstElemXmlResultDataDefaultValue?.OptChild("testValue");
+    // если нам вернулось не значение по умолчанию то должен быть XmlElem
+    arrayOptFirstElemXmlResultDataDefaultValue?.OptChild("testValue");
 }
 
 ArrayOptMax(testPrimitivesArray, "This");
@@ -128,9 +128,9 @@ arraySelectByKeyXmlResultData[0].OptChild("testValue");
 ArraySelectBySortedKey(testPrimitivesArray, 1, "a");
 ArraySelectBySortedKey(testArrayOfObjects, 2, "option1");
 const arraySelectBySortedKeyXmlResultData = ArraySelectBySortedKey(
-  xmlDocumentForTesting.TopElem.tasks,
-  "testValue",
-  "name"
+    xmlDocumentForTesting.TopElem.tasks,
+    "testValue",
+    "name"
 );
 // проверка на то что мы получаем XmlElem, к которому можем обратиться
 arraySelectBySortedKeyXmlResultData[0].OptChild("testValue");
@@ -165,9 +165,9 @@ result.Send();
 
 DefaultDb.Name = "default_db_name";
 if (DefaultDb.IsShared) {
-  DefaultDb.StorageDirectory = "";
-  var document = DefaultDb.OpenNewObjectDoc<VacancyDocument>("vacancy");
-  document.TopElem.Name == "vacancy";
+    DefaultDb.StorageDirectory = "";
+    var document = DefaultDb.OpenNewObjectDoc<VacancyDocument>("vacancy");
+    document.TopElem.Name == "vacancy";
 }
 
 // eslint-disable-next-line no-new-object
@@ -185,9 +185,9 @@ const stringValue = object1.GetOptProperty("value");
 alert(stringValue);
 
 var obj = {
-  key: "value",
-  key1: "value",
-  key3: "value",
+    key: "value",
+    key1: "value",
+    key3: "value",
 };
 
 obj.SetProperty("1", "1");

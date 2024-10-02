@@ -1,43 +1,52 @@
 {
-  "name": "@umbrik/webtutor-types",
-  "version": "9.8.1",
-  "directories": {
-    "lib": "lib"
-  },
-  "scripts": {
-    "lint": "eslint -c ./lib/.eslintrc.json lib",
-    "tsc:lib": "tsc -p lib/tsconfig.json",
-    "tsc:tests": "tsc -p tests/tsconfig.json",
-    "check": "npm run lint && npm run tsc:lib && npm run tsc:tests",
-    "version:check": "node ci/version-check.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/umbrik/webtutor-types.git"
-  },
-  "keywords": [
-    "types",
-    "websoft",
-    "webtutor",
-    "webtutor-types",
-    "wt"
-  ],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/umbrik/webtutor-types/issues"
-  },
-  "homepage": "https://github.com/umbrik/webtutor-types#readme",
-  "devDependencies": {
-    "@types/node": "^20.4.5",
-    "@typescript-eslint/eslint-plugin": "^5.26.0",
-    "@typescript-eslint/parser": "^5.26.0",
-    "@umbrik/eslint-config-hcm-wt": "^1.5.0",
-    "eslint": "^8.17.0",
-    "eslint-plugin-jsdoc": "^46.4.5",
-    "eslint-plugin-no-for-of-loops": "^1.0.1",
-    "semver": "^7.6.2",
-    "typescript": "4.4.4",
-    "typescript-eslint": "^7.13.0"
-  }
+    "name": "@globexit/websoft-types",
+    "version": "1.0.0",
+    "directories": {
+        "lib": "lib"
+    },
+    "files": [
+        "lib"
+    ],
+    "scripts": {
+        "lint": "eslint -c ./src/.eslintrc.json lib",
+        "tsc:lib": "tsc -p src/common/tsconfig.json",
+        "tsc:tests": "tsc -p tests/tsconfig.json",
+        "check": "npm run lint && npm run tsc:lib && npm run tsc:tests",
+        "version:check": "node ci/version-check.js",
+        "build:common": "cd src/common && ttsc",
+        "build:web-soft": "node src/copy-types.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Globex-IT/websoft-types.git"
+    },
+    "keywords": [
+        "types",
+        "websoft",
+        "webtutor",
+        "webtutor-types",
+        "wt",
+        "ws"
+    ],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/Globex-IT/websoft-types/issues"
+    },
+    "homepage": "https://github.com/Globex-IT/websoft-types#readme",
+    "devDependencies": {
+        "@types/node": "^14.18.63",
+        "@typescript-eslint/eslint-plugin": "^5.26.0",
+        "@typescript-eslint/parser": "^5.26.0",
+        "@umbrik/eslint-config-hcm-wt": "^1.5.0",
+        "babel-loader": "^9.2.1",
+        "eslint": "^8.17.0",
+        "eslint-plugin-jsdoc": "^46.4.5",
+        "eslint-plugin-no-for-of-loops": "^1.0.1",
+        "fs-extra": "^11.2.0",
+        "semver": "^7.6.2",
+        "ttypescript": "^1.5.15",
+        "typescript": "4.4.4",
+        "typescript-eslint": "^7.13.0"
+    }
 }
