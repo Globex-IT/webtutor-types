@@ -8,8 +8,8 @@
         "moduleResolution": "node",
         "baseUrl": "src",
         "typeRoots": [
-            "node_modules/@globexit/webtutor-types/build/web-soft/types",
-            "node_modules/@globexit/webtutor-types/build/web-soft/types/xml"
+            "../../lib/web-soft/types",
+            "../../lib/web-soft/types/xml"
         ],
         "esModuleInterop": true,
         "noLib": true

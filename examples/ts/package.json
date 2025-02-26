@@ -2,7 +2,6 @@
     "name": "ts",
     "version": "1.0.0",
     "dependencies": {
-        "@globexit/webtutor-types": "1.0.35",
         "typescript": "^5.4.5"
     }
 }

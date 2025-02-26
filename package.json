@@ -1,6 +1,6 @@
 {
     "name": "@globexit/websoft-types",
-    "version": "1.0.0",
+    "version": "2.0.3",
     "directories": {
         "lib": "lib"
     },
@@ -13,8 +13,8 @@
         "tsc:tests": "tsc -p tests/tsconfig.json",
         "check": "npm run lint && npm run tsc:lib && npm run tsc:tests",
         "version:check": "node ci/version-check.js",
-        "build:common": "cd src/common && ttsc",
-        "build:web-soft": "node src/copy-types.js"
+        "build:ssjs-transpiler": "cd src/ssjs-transpiler && ttsc",
+        "build:addatation-files": "node src/copy-projects.js"
     },
     "repository": {
         "type": "git",
@@ -35,6 +35,7 @@
     },
     "homepage": "https://github.com/Globex-IT/websoft-types#readme",
     "devDependencies": {
+        "@types/gulp": "^4.0.17",
         "@types/node": "^14.18.63",
         "@typescript-eslint/eslint-plugin": "^5.26.0",
         "@typescript-eslint/parser": "^5.26.0",
@@ -48,5 +49,11 @@
         "ttypescript": "^1.5.15",
         "typescript": "4.4.4",
         "typescript-eslint": "^7.13.0"
+    },
+    "dependencies": {
+        "gulp": "^5.0.0",
+        "gulp-include": "^2.4.1",
+        "gulp-typescript": "^6.0.0-alpha.1",
+        "ts-morph": "^24.0.0"
     }
 }
